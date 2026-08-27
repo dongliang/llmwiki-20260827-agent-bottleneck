@@ -60,7 +60,8 @@ async function showPage(path) {
     const res = await fetch(encodeURI(path));
     if (!res.ok) throw new Error(res.status);
     const text = await res.text();
-    const { meta, body } = parseFrontmatter(text);
+    const { meta, body: rawBody } = parseFrontmatter(text);
+    let body = rawBody;
     let title = meta.title || path.split('/').pop().replace(/\.md$/, '');
     document.title = title + ' · llmwiki';
     const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
@@ -76,7 +77,8 @@ async function showPage(path) {
       '<div class="backtop"><a href="#/wiki/index.md">← 返回全局目录</a></div>';
     window.scrollTo(0, 0);
   } catch (e) {
-    content.innerHTML = '<h2>404 · 找不到 ' + path + '</h2><p class="muted">可能尚未入库，或链接有误。</p><p><a href="#/wiki/index.md">← 返回全局目录</a></p>';
+    content.innerHTML = '<h2>加载失败</h2><p class="muted">' + (e && e.message) + '</p><p><a href="#/wiki/index.md">← 返回全局目录</a></p>';
+    console.error(e);
   }
 }
 
