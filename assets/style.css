@@ -22,7 +22,9 @@ nav a:hover{color:var(--accent);text-decoration:none}
 .crumb{padding:18px 0 0;font-size:13px;color:var(--muted);font-family:ui-monospace,Menlo,monospace}
 .crumb a{color:var(--muted)}
 .content{padding:16px 0 40px}
-.content h1{font-size:26px;line-height:1.4;border-bottom:1px solid var(--border);padding-bottom:12px}
+.content h1{font-size:26px;line-height:1.4;margin-bottom:6px}
+.content .card-title{border-bottom:1px solid var(--border);padding-bottom:12px}
+.content .aliases{font-size:13px;margin:10px 0 0}
 .content h2{font-size:20px;margin-top:36px;border-left:3px solid var(--accent);padding-left:10px}
 .content h3{font-size:17px;margin-top:24px;color:var(--accent2)}
 .content blockquote{margin:16px 0;padding:10px 16px;border-left:3px solid var(--quote);

@@ -61,10 +61,18 @@ async function showPage(path) {
     if (!res.ok) throw new Error(res.status);
     const text = await res.text();
     const { meta, body } = parseFrontmatter(text);
-    const title = meta.title || path.split('/').pop().replace(/\.md$/, '');
+    let title = meta.title || path.split('/').pop().replace(/\.md$/, '');
     document.title = title + ' · llmwiki';
+    const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+    const aliases = Array.isArray(meta.aliases) ? meta.aliases : [];
+    const aliasLine = aliases.length
+      ? '<p class="aliases muted">别名：' + aliases.map(esc).join(' · ') + '</p>' : '';
+    // 正文自带 H1 时直接用它当卡片标题（避免重复）
+    const h1 = body.match(/^#\s+(.+)\r?\n?/);
+    if (h1) { title = h1[1].trim(); body = body.slice(h1[0].length); }
     marked.setOptions({ gfm: true, breaks: false });
-    content.innerHTML = renderMeta(meta) + marked.parse(body) +
+    content.innerHTML = '<h1 class="card-title">' + esc(title) + '</h1>' + aliasLine +
+      renderMeta(meta) + marked.parse(body) +
       '<div class="backtop"><a href="#/wiki/index.md">← 返回全局目录</a></div>';
     window.scrollTo(0, 0);
   } catch (e) {
